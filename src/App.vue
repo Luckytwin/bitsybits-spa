@@ -116,16 +116,40 @@
             </div>
             <div class="column col-9 col-xs-12">
               <div class="panel">
-                <div class="panel-header">
-                  <div class="panel-title h5">Comments</div>
-                  <div class="h6">Comments</div>
-                </div>
-                <div class="panel-body">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui porta orci, quis semper odio felis ut quam.</p>
-                </div>
-                <div class="panel-footer">
-                  
-                </div>
+              <div class="panel-header">
+                <div class="panel-title h5">Code Block</div>
+              </div>
+              <pre><code class="lisp">;; known globals
+                  *read-base*
+                  (let* ((*package* nil)) 'random-symbol)   ; let/let*/lambda are "special"
+
+                  ;; known functions, unknown globals
+                  (when (<= 17.69 (get-value))
+                    (incf *my-global-lol*))
+
+                  ;; number tests
+                  ;; all have class "number", but depending on type have integer, float, hex, binary
+                  '(80 -69.4 +5 822342.287 #xf40d #b0101)
+
+                  ;; t/nil + strings
+                  (format t "highlight-lisp.js sucksp: ~a~%" nil)
+
+                  ;; testing lambda-list specials (&key, &body, etc), multi-line strings,
+                  ;; constants, symbols, keywords
+                  (defun test-me (lol &key omg (lol 'wtf))
+                    (let ((*global* 'ur-mom)
+                          (strings "r pretty kewl LOL")
+                          (multi-line-strings "can be kewl
+                              as well")
+                          (+my-constant+ "wait, constants don't change!!"))
+                      (make-instance 'error :message "OMG ERROR!!!")))
+
+                  ;; known vs unknown #'functions
+                  (make-hash-table :test #'equal)
+                  (make-hash-table :test #'equalzz)
+
+                  ;; testing known keywords (have class "known" as well as "keyword")
+                  (loop for x being the :hash-keys of my-hash-table collect x)</code></pre>
               </div>
             </div>
           </div>
@@ -149,6 +173,12 @@ export default {
       this.$refs['top-progress'].removeAttribute("value");
       setTimeout(() => this.$refs['top-progress'].value = 0, 3000);
     }
+  },
+  mounted: function() {
+    document.addEventListener("DOMContentLoaded",()=>{
+      console.log(' ready ', HighlightLisp)
+      HighlightLisp.highlight_auto();
+   });
   }
 }
 </script>
